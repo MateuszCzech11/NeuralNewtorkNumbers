@@ -6,7 +6,7 @@ from scipy.io.arff import loadarff
 from PIL import Image
 
 class NeuralNetwork():
-    mlp = MLPClassifier()
+    mlp = MLPClassifier(activation='relu',hidden_layer_sizes=(100,50),learning_rate='adaptive') #best acc after grid search
     X=None #2d matrix of features 
     y=None #1d array of targets
 
@@ -30,8 +30,11 @@ class NeuralNetwork():
     def predictFromImage(self):
         looping = True
         while looping:
-            filename = str(input("Make a 28x28 image and type its name with extension: "))
-            img = Image.open(filename)
+            filename = str(input("Make a 28x28 image and type its name with extension: [number.png]"))
+            if filename=="":
+                img =Image.open('number.png')
+            else:
+                img = Image.open(filename)
             imgGrayscale=img.convert('L')
             imgData=np.array(imgGrayscale).reshape(-1)
             print("Prediction: ",self.mlp.predict(imgData.reshape(1,-1)))
@@ -39,7 +42,3 @@ class NeuralNetwork():
             if again=="n":
                 looping=False
         print("Predicting ended.")
-
-        
-
-
